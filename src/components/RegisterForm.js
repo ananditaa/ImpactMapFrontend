@@ -11,10 +11,28 @@ const RegisterForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://impactmapbackend-1.onrender.com/register', { username, password });
-      console.log('Registered successfully', response.data);
-      // You can also redirect the user or perform other actions after a successful registration
+
+      if (response.status === 201) {
+        // Registration success
+        setSuccess('Registration successful!');
+        setError(''); // Clear any previous error messages
+      }
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      if (err.response) {
+        if (err.response.status === 400 && err.response.data.msg === 'User already exists') {
+          // Specific error for user already exists
+          setError('This username is already taken. Please choose another one.');
+        } else {
+          // General registration failure
+          setError('Registration failed. Please try again.');
+        }
+      } else {
+        // Handle network error or unexpected failure
+        setError('An error occurred. Please try again later.');
+      }
+
+      // Clear the success message if any error occurs
+      setSuccess('');
     }
   };
 
