@@ -11,38 +11,38 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Make the POST request to the backend API
       const response = await axios.post('https://impactmapbackend-1.onrender.com/register', { username, password });
 
-      console.log(response); // Log the entire response to check the status and message
+      console.log(response); // Log the response to check the status and message
 
-      // Check if the response status indicates success
-      if (response.status >= 200 && response.status < 300) {
+      if (response.status === 201) {
         // Registration success
         setSuccess('Registration successful!');
         setError(''); // Clear any previous error messages
       }
     } catch (err) {
-      console.log(err); // Log the error to capture the details
+      console.log(err); // Log the error details
 
       if (err.response) {
+        // Check for specific error responses
         if (err.response.status === 400 && err.response.data.msg === 'User already exists') {
-          // Specific error for user already exists
           setError('This username is already taken. Please choose another one.');
         } else {
           // General registration failure
           setError('Registration failed. Please try again.');
         }
       } else {
-        // Handle network error or unexpected failure
+        // Handle network or unexpected errors
         setError('An error occurred. Please try again later.');
       }
 
-      // Clear the success message if any error occurs
+      // Clear the success message if an error occurs
       setSuccess('');
     }
   };
 
-   return (
+  return (
     <div className="auth-container">
       <h2 className="auth-title">Create an Account</h2>
       <form className="auth-form" onSubmit={handleSubmit}>
@@ -61,7 +61,11 @@ const RegisterForm = () => {
           required
         />
         <button type="submit">Register</button>
+
+        {/* Show error message if there's any */}
         {error && <p className="error-message">{error}</p>}
+        
+        {/* Show success message if registration is successful */}
         {success && <p className="success-message">{success}</p>}
       </form>
     </div>
