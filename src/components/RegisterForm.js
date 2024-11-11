@@ -42,26 +42,28 @@ const RegisterForm = () => {
     }
   };
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
+   return (
+    <div className="auth-container">
+      <h2 className="auth-title">Create an Account</h2>
+      <form className="auth-form" onSubmit={handleSubmit}>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
+          required
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
+          required
         />
         <button type="submit">Register</button>
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
       </form>
-
-      {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
     </div>
   );
 };
