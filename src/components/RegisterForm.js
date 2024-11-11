@@ -13,14 +13,17 @@ const RegisterForm = () => {
     try {
       const response = await axios.post('https://impactmapbackend-1.onrender.com/register', { username, password });
 
-      console.log(response);
+      console.log(response); // Log the entire response to check the status and message
 
-      if (response.status === 201) {
+      // Check if the response status indicates success
+      if (response.status >= 200 && response.status < 300) {
         // Registration success
         setSuccess('Registration successful!');
         setError(''); // Clear any previous error messages
       }
     } catch (err) {
+      console.log(err); // Log the error to capture the details
+
       if (err.response) {
         if (err.response.status === 400 && err.response.data.msg === 'User already exists') {
           // Specific error for user already exists
@@ -40,26 +43,25 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2 className="auth-title">Create an Account</h2>
-      <form className="auth-form" onSubmit={handleSubmit}>
+    <div>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
-          required
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          required
         />
         <button type="submit">Register</button>
-        {error && <p className="error-message">{error}</p>}
       </form>
+
+      {error && <div className="error">{error}</div>}
+      {success && <div className="success">{success}</div>}
     </div>
   );
 };
