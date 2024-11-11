@@ -13,6 +13,8 @@ const RegisterForm = () => {
     try {
       const response = await axios.post('https://impactmapbackend-1.onrender.com/register', { username, password });
 
+      console.log(response);
+
       if (response.status === 201) {
         // Registration success
         setSuccess('Registration successful!');
